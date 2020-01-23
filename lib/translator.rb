@@ -1,13 +1,31 @@
 # require modules here
+require "pry"
+require "yaml"
 
-def load_library
-  # code goes here
+def load_library(file)
+  ehash = {:get_emoticon => {}, :get_meaning => {}}
+  YAML.load_file(file).each do  |meaning, array|
+    english, japanese = array
+    ehash[:get_emoticon][english] = japanese
+    ehash[:get_meaning][japanese] = meaning
+  end
+  ehash
 end
 
-def get_japanese_emoticon
-  # code goes here
+def get_japanese_emoticon(emoticons, emoti)
+  ehash = load_library(emoticons)
+  if ehash[:get_emoticon][emoti]
+    return  ehash[:get_emoticon][emoti]
+  else
+    "Sorry, that emoticon was not found"
+  end
 end
 
-def get_english_meaning
-  # code goes here
-end
+def get_english_meaning(emoticons, japanese_emoticon)
+  ehash = load_library(emoticons)
+  if ehash[:get_meaning][japanese_emoticon]
+    return ehash[:get_meaning][japanese_emoticon]
+  else
+    "Sorry, that emoticon was not found"
+  end
+  end
